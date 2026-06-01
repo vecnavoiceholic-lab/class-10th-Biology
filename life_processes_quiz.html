@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Processes — Advanced Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #070b14;
+    --bg2: #0d1320;
+    --bg3: #111827;
+    --glass: rgba(255,255,255,0.03);
+    --glass-border: rgba(255,255,255,0.07);
+    --neon: #3b82f6;
+    --neon2: #818cf8;
+    --neon3: #c084fc;
+    --neon-glow: rgba(59,130,246,0.35);
+    --purple-glow: rgba(192,132,252,0.25);
+    --text: #e2e8f0;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+    --correct: #10b981;
+    --wrong: #f43f5e;
+    --warn: #f59e0b;
+    --hard: #f59e0b;
+    --very-hard: #f43f5e;
+    --olympiad: #c084fc;
+    --border-radius: 16px;
+    --card-radius: 20px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* BG mesh */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 10%, rgba(59,130,246,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(192,132,252,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 50% 50%, rgba(129,140,248,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 20px 80px; position: relative; z-index: 1; }
+
+  /* HEADER */
+  .header {
+    padding: 60px 0 40px;
+    text-align: center;
+  }
+  .header-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--neon);
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #e2e8f0 0%, #818cf8 50%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header p {
+    color: var(--text-muted);
+    font-size: 14px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.05);
+    border-radius: 100px;
+    height: 4px;
+    margin: 30px 0 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon), var(--neon3));
+    border-radius: 100px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+  .progress-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+  .progress-stats span strong { color: var(--neon2); }
+
+  /* TOOLBAR */
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 28px 0 20px;
+    align-items: center;
+  }
+  .toolbar-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    backdrop-filter: blur(10px);
+  }
+  .btn:hover {
+    border-color: rgba(59,130,246,0.4);
+    color: var(--neon);
+    background: rgba(59,130,246,0.08);
+    transform: translateY(-1px);
+  }
+  .btn.primary {
+    background: rgba(59,130,246,0.15);
+    border-color: rgba(59,130,246,0.35);
+    color: var(--neon);
+  }
+  .btn.primary:hover {
+    background: rgba(59,130,246,0.25);
+    box-shadow: 0 0 20px rgba(59,130,246,0.2);
+  }
+  .btn.danger {
+    background: rgba(244,63,94,0.1);
+    border-color: rgba(244,63,94,0.3);
+    color: #f87171;
+  }
+  .btn.danger:hover { background: rgba(244,63,94,0.2); }
+
+  /* FILTER CHIPS */
+  .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+  }
+  .chip:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+  .chip.active {
+    background: rgba(129,140,248,0.15);
+    border-color: rgba(129,140,248,0.4);
+    color: var(--neon2);
+  }
+  .chip[data-filter="hard"].active { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.4); color: var(--hard); }
+  .chip[data-filter="very-hard"].active { background: rgba(244,63,94,0.12); border-color: rgba(244,63,94,0.4); color: var(--very-hard); }
+  .chip[data-filter="olympiad"].active { background: rgba(192,132,252,0.12); border-color: rgba(192,132,252,0.4); color: var(--olympiad); }
+
+  /* TABS */
+  .tabs-wrap {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 4px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    backdrop-filter: blur(10px);
+  }
+  .tab {
+    flex: 1;
+    min-width: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+  .tab.active {
+    background: rgba(59,130,246,0.15);
+    color: var(--neon);
+    box-shadow: inset 0 0 0 1px rgba(59,130,246,0.25);
+  }
+
+  /* TAB PANELS */
+  .tab-panel { display: none; animation: fadeSlide 0.4s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.2);
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .section-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: auto;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--glass-border);
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--card-radius);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(16px);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 0% 0%, rgba(59,130,246,0.04) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .card:hover { border-color: rgba(59,130,246,0.2); transform: translateY(-2px); }
+  .card:hover::before { opacity: 1; }
+  .card.hidden { display: none; }
+
+  /* CARD META */
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.05);
+    padding: 3px 9px;
+    border-radius: 6px;
+    border: 1px solid var(--glass-border);
+  }
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .badge-hard { background: rgba(245,158,11,0.12); color: var(--hard); border: 1px solid rgba(245,158,11,0.25); }
+  .badge-very-hard { background: rgba(244,63,94,0.12); color: #fb7185; border: 1px solid rgba(244,63,94,0.25); }
+  .badge-olympiad { background: rgba(192,132,252,0.12); color: var(--olympiad); border: 1px solid rgba(192,132,252,0.25); }
+
+  /* QUESTION TEXT */
+  .q-text {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.7;
+  }
+  .q-text .kw {
+    color: var(--neon2);
+    font-weight: 500;
+  }
+
+  /* MCQ OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+    color: var(--text-dim);
+    user-select: none;
+  }
+  .option:hover:not(.locked) {
+    border-color: rgba(59,130,246,0.3);
+    background: rgba(59,130,246,0.05);
+    color: var(--text);
+  }
+  .option-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    min-width: 18px;
+    padding-top: 1px;
+    transition: color 0.2s;
+  }
+  .option.selected { border-color: rgba(59,130,246,0.45); background: rgba(59,130,246,0.08); color: var(--text); }
+  .option.selected .option-key { color: var(--neon); }
+  .option.correct { border-color: rgba(16,185,129,0.45); background: rgba(16,185,129,0.08); color: #6ee7b7; }
+  .option.correct .option-key { color: var(--correct); }
+  .option.wrong { border-color: rgba(244,63,94,0.45); background: rgba(244,63,94,0.08); color: #fda4af; }
+  .option.wrong .option-key { color: var(--wrong); }
+  .option.locked { cursor: default; }
+
+  /* FEEDBACK */
+  .feedback {
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    display: none;
+    font-weight: 500;
+  }
+  .feedback.correct { background: rgba(16,185,129,0.1); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); display: block; }
+  .feedback.wrong { background: rgba(244,63,94,0.1); color: #fda4af; border: 1px solid rgba(244,63,94,0.25); display: block; }
+
+  /* ANSWER REVEAL */
+  .answer-wrap {
+    border-top: 1px solid var(--glass-border);
+    padding-top: 14px;
+    margin-top: 4px;
+  }
+  .answer-box {
+    background: rgba(129,140,248,0.06);
+    border: 1px solid rgba(129,140,248,0.2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    display: none;
+    animation: fadeSlide 0.3s ease;
+  }
+  .answer-box.visible { display: block; }
+  .answer-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--neon2);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .answer-text { color: var(--text); }
+  .answer-text .ans-key { color: var(--correct); font-weight: 600; }
+
+  /* TOGGLE BTN */
+  .toggle-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(129,140,248,0.25);
+    background: rgba(129,140,248,0.07);
+    color: var(--neon2);
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 10px;
+  }
+  .toggle-btn:hover {
+    background: rgba(129,140,248,0.15);
+    border-color: rgba(129,140,248,0.45);
+  }
+
+  /* TRUE/FALSE */
+  .tf-options { display: flex; gap: 10px; margin-bottom: 14px; }
+  .tf-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.02);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: var(--transition);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tf-btn:hover:not(.locked) { background: rgba(59,130,246,0.07); color: var(--text); border-color: rgba(59,130,246,0.3); }
+  .tf-btn.selected { border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.1); color: var(--neon); }
+  .tf-btn.correct { border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.1); color: var(--correct); }
+  .tf-btn.wrong { border-color: rgba(244,63,94,0.4); background: rgba(244,63,94,0.1); color: var(--wrong); }
+  .tf-btn.locked { cursor: default; }
+
+  /* MATCH TABLE */
+  .match-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .match-col { display: flex; flex-direction: column; gap: 8px; }
+  .match-col-head {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .match-item {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.02);
+    font-size: 13px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .match-item .letter {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--neon2);
+    min-width: 16px;
+  }
+  .match-item .num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--neon3);
+    min-width: 16px;
+  }
+
+  /* CHALLENGE */
+  .challenge-q {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 14px;
+    padding-left: 14px;
+    border-left: 2px solid rgba(192,132,252,0.4);
+  }
+
+  /* AR */
+  .ar-row { margin-bottom: 10px; }
+  .ar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .ar-label.assertion { color: var(--neon); }
+  .ar-label.reason { color: var(--neon3); }
+  .ar-text { font-size: 14px; color: var(--text-dim); line-height: 1.65; }
+  .ar-options { display: flex; flex-direction: column; gap: 6px; margin: 14px 0; }
+  .ar-option {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-dim);
+    transition: var(--transition);
+    display: flex;
+    gap: 10px;
+  }
+  .ar-option:hover:not(.locked) { background: rgba(59,130,246,0.06); border-color: rgba(59,130,246,0.25); color: var(--text); }
+  .ar-option .opt-letter { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-muted); min-width: 14px; }
+  .ar-option.selected { border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.08); color: var(--text); }
+  .ar-option.correct { border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.08); color: #6ee7b7; }
+  .ar-option.wrong { border-color: rgba(244,63,94,0.4); background: rgba(244,63,94,0.08); color: #fda4af; }
+  .ar-option.locked { cursor: default; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .empty-state .icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 100px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(30,30,50,0.95);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: var(--text);
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    backdrop-filter: blur(20px);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 600px) {
+    .header { padding: 40px 0 28px; }
+    .card { padding: 16px 18px; }
+    .match-table { grid-template-columns: 1fr; }
+    .tabs-wrap { gap: 3px; }
+    .tab { font-size: 11px; padding: 8px 8px; min-width: 70px; }
+    .toolbar { gap: 6px; }
+    .toolbar-actions { width: 100%; margin-left: 0; }
+    .btn { font-size: 10px; padding: 7px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="header">
+    <div class="header-tag">CBSE Class 10 · Biology</div>
+    <h1>Life Processes</h1>
+    <p>Advanced conceptual questions — MCQs, Matching, True/False, Assertion–Reason & Olympiad challenges</p>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-stats">
+    <span>Progress: <strong id="answeredCount">0</strong> / <strong id="totalCount">0</strong> answered</span>
+    <span id="scoreSpan">Score: <strong>–</strong></span>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="filter-chips">
+      <div class="chip active" data-filter="all">All</div>
+      <div class="chip" data-filter="hard">Hard</div>
+      <div class="chip" data-filter="very-hard">Very Hard</div>
+      <div class="chip" data-filter="olympiad">Olympiad</div>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn primary" id="showAllBtn">Show All Answers</button>
+      <button class="btn danger" id="hideAllBtn">Hide All</button>
+      <button class="btn" id="copyBtn">⊞ Copy</button>
+      <button class="btn" id="downloadBtn">↓ Download</button>
+      <button class="btn" id="printBtn">⎙ PDF</button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-wrap">
+    <button class="tab active" data-tab="mcq">MCQs</button>
+    <button class="tab" data-tab="match">Match</button>
+    <button class="tab" data-tab="tf">True / False</button>
+    <button class="tab" data-tab="ar">Assertion–Reason</button>
+    <button class="tab" data-tab="challenge">Challenge</button>
+  </div>
+
+  <!-- ======= MCQ TAB ======= -->
+  <div class="tab-panel active" id="tab-mcq">
+    <div class="section-header">
+      <div class="section-icon">❓</div>
+      <div class="section-title">Multiple Choice Questions</div>
+      <div class="section-count">10 questions</div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Q1</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">A person suffers damage to the <span class="kw">villi</span> of the small intestine. Which process will be affected the most?</div>
+      <div class="options">
+        <div class="option" data-q="mcq1" data-val="A"><span class="option-key">A</span>Digestion of proteins</div>
+        <div class="option" data-q="mcq1" data-val="B"><span class="option-key">B</span>Absorption of nutrients</div>
+        <div class="option" data-q="mcq1" data-val="C"><span class="option-key">C</span>Emulsification of fats</div>
+        <div class="option" data-q="mcq1" data-val="D"><span class="option-key">D</span>Secretion of digestive enzymes</div>
+      </div>
+      <div class="feedback" id="fb-mcq1"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-mcq1">Show Answer</button>
+        <div class="answer-box" id="ans-mcq1">
+          <span class="answer-label">Correct Answer</span>
+          <div class="answer-text"><span class="ans-key">B — Absorption of nutrients.</span> Villi are finger-like projections that massively increase surface area for nutrient absorption. Damage reduces this surface area, directly impairing absorption.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Q2</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">Which statement correctly explains why the <span class="kw">left ventricle</span> has the thickest muscular wall?</div>
+      <div class="options">
+        <div class="option" data-q="mcq2" data-val="A"><span class="option-key">A</span>It pumps blood to the lungs.</div>
+        <div class="option" data-q="mcq2" data-val="B"><span class="option-key">B</span>It receives oxygenated blood from the lungs.</div>
+        <div class="option" data-q="mcq2" data-val="C"><span class="option-key">C</span>It pumps blood to the entire body against high pressure.</div>
+        <div class="option" data-q="mcq2" data-val="D"><span class="option-key">D</span>It prevents mixing of oxygenated and deoxygenated blood.</div>
+      </div>
+      <div class="feedback" id="fb-mcq2"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-mcq2">Show Answer</button>
+        <div class="answer-box" id="ans-mcq2">
+          <span class="answer-label">Correct Answer</span>
+          <div class="answer-text"><span class="ans-key">C — Pumps blood to the entire body against high pressure.</span> Systemic circulation demands far greater force than pulmonary circulation, hence thicker walls.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Q3</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">During vigorous exercise, the concentration of <span class="kw">carbon dioxide</span> in blood increases. This <em>directly</em> causes:</div>
+      <div class="options">
+        <div class="option" data-q="mcq3" data-val="A"><span class="option-key">A</span>Faster heartbeat only</div>
+        <div class="option" data-q="mcq3" data-val="B"><span class="option-key">B</span>Faster breathing rate only</div>
+        <div class="option" data-q="mcq3" data-val="C"><span class="option-key">C</span>Increased breathing rate and heartbeat</div>
+        <div class="option" data-q="mcq3" data-val="D"><span class="option-key">D</span>Reduced breathing rate</div>
+      </div>
+      <div class="feedback" id="fb-mcq3"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-mcq3">Show Answer</button>
+        <div class="answer-box" id="ans-mcq3">
+          <span class="answer-label">Correct Answer</span>
+          <div class="answer-text"><span class="ans-key">C — Increased breathing rate and heartbeat.</span> Elevated CO₂ is sensed by the brain's respiratory centre, triggering both faster breathing (to expel CO₂) and a faster heart rate (to deliver more O₂).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Q4</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">Which of the following would <span class="kw">immediately stop ATP production</span> in human cells?</div>
+      <div class="options">
+        <div class="option" data-q="mcq4" data-val="A"><span class="option-key">A</span>Absence of saliva</div>
+        <div class="option" data-q="mcq4" data-val="B"><span class="option-key">B</span>Absence of oxygen and glucose together</div>
+        <div class="option" data-q="mcq4" data-val="C"><span class="option-key">C</span>Absence of bile juice</div>
+        <div class="option" data-q="mcq4" data-val="D"><span class="option-key">D</span>Absence of hydrochloric acid</div>
+      </div>
+      <div class="feedback" id="fb-mcq4"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-mcq4">Show Answer</button>
+        <div class="answer-box" id="ans-mcq4">
+          <span class="answer-label">Correct Answer</span>
+          <div class="answer-text"><span class="ans-key">B — Absence of oxygen and glucose together.</span> Glucose is the primary fuel; oxygen is required for aerobic respiration. Without both, all ATP-generating pathways (aerobic and anaerobic) cease.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Q5</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">A plant kept in a <span class="kw">humid environment</span> shows reduced transpiration. Which process is most directly affected?</div>
+      <div class="options">
+        <div class="option" data-q="mcq5" data-val="A"><span class="option-key">A</span>Water absorption by roots</div>
+        <div class="option" data-q="mcq5" data-val="B"><span class="option-key">B</span>Upward movement of water in xylem</div>
+        <div class="option" data-q="mcq5" data-val="C"><span class="option-key">C</span>Photosynthesis</div>
+        <div class="option" data-q="mcq5" data-val="D"><span class="option-key">D</span>Germination</div>
+      </div>
+      <div class="feedback" id="fb-mcq5"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-mcq5">Show Answer</button>
+        <div class="answer-box" id="ans-mcq5">
+          <span class="answer-label">Correct Answer</span>
+          <div class="answer-text"><span class="ans-key">B — Upward movement of water in xylem.</span> Transpiration creates the pulling force (transpiration pull) that drives water up through the xylem. Less transpiration = weaker pull = slower ascent.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Q6</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">Which structure prevents the <span class="kw">backflow of blood</span> into the left atrium?</div>
+      <div class="options">
+        <div class="option" data-q="mcq6" data-val="A"><span class="option-key">A</span>Semilunar valve</div>
+        <div class="option" data-q="mcq6" data-val="B"><span class="option-key">B</span>Tricuspid valve</div>
+        <div class="option" data-q="mcq6" data-val="C"><span class="option-key">C</span>Bicuspid valve</div>
+        <div class="option" data-q="mcq6" data-val="D"><span class="option-key">D</span>Septum</div>
+      </div>
+      <div class="feedback" id="fb-mcq6"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-mcq6">Show Answer</button>
+        <div class="answer-box" id="ans-mcq6">
+          <span class="answer-label">Correct Answer</span>
+          <div class="answer-text"><span class="ans-key">C — Bicuspid (Mitral) valve.</span> Located between the left atrium and left ventricle, it prevents backflow into the atrium when the ventricle contracts.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Q7</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">Which event occurs <span class="kw">first</span> after food enters the stomach?</div>
+      <div class="options">
+        <div class="option" data-q="mcq7" data-val="A"><span class="option-key">A</span>Absorption of amino acids</div>
+        <div class="option" data-q="mcq7" data-val="B"><span class="option-key">B</span>Action of pepsin on proteins</div>
+        <div class="option" data-q="mcq7" data-val="C"><span class="option-key">C</span>Neutralisation of acid by bile</div>
+        <div class="option" data-q="mcq7" data-val="D"><span class="option-key">D</span>Reabsorption of water</div>
+      </div>
+      <div class="feedback" id="fb-mcq7"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-mcq7">Show Answer</button>
+        <div class="answer-box" id="ans-mcq7">
+          <span class="answer-label">Correct Answer</span>
+          <div class="answer-text"><span class="ans-key">B — Action of pepsin on proteins.</span> The stomach secretes pepsin (activated by HCl) which begins protein digestion immediately. Bile, amino acid absorption, and water reabsorption occur later in the intestine.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Q8</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">A plant loses large quantities of water but continues to absorb water from soil. This is mainly because:</div>
+      <div class="options">
+        <div class="option" data-q="mcq8" data-val="A"><span class="option-key">A</span>Root pressure alone is sufficient</div>
+        <div class="option" data-q="mcq8" data-val="B"><span class="option-key">B</span><span class="kw">Transpiration pull</span> continuously operates</div>
+        <div class="option" data-q="mcq8" data-val="C"><span class="option-key">C</span>Xylem actively pumps water upward</div>
+        <div class="option" data-q="mcq8" data-val="D"><span class="option-key">D</span>Phloem transports water upward</div>
+      </div>
+      <div class="feedback" id="fb-mcq8"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-mcq8">Show Answer</button>
+        <div class="answer-box" id="ans-mcq8">
+          <span class="answer-label">Correct Answer</span>
+          <div class="answer-text"><span class="ans-key">B — Transpiration pull continuously operates.</span> The suction created by evaporation from leaves draws water upward through xylem, which in turn pulls water in from the soil through roots.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="card" data-difficulty="very-hard">
+      <div class="card-meta"><span class="q-num">Q9</span><span class="badge badge-very-hard">Very Hard</span></div>
+      <div class="q-text">If the kidneys fail to remove <span class="kw">urea</span> effectively, which system will be affected first?</div>
+      <div class="options">
+        <div class="option" data-q="mcq9" data-val="A"><span class="option-key">A</span>Digestive system</div>
+        <div class="option" data-q="mcq9" data-val="B"><span class="option-key">B</span>Respiratory system</div>
+        <div class="option" data-q="mcq9" data-val="C"><span class="option-key">C</span>Internal chemical balance of the body</div>
+        <div class="option" data-q="mcq9" data-val="D"><span class="option-key">D</span>Skeletal system</div>
+      </div>
+      <div class="feedback" id="fb-mcq9"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-mcq9">Show Answer</button>
+        <div class="answer-box" id="ans-mcq9">
+          <span class="answer-label">Correct Answer</span>
+          <div class="answer-text"><span class="ans-key">C — Internal chemical balance (homeostasis).</span> Urea accumulation causes uremia, disrupting blood chemistry, pH, and osmotic balance — the body's homeostasis is compromised before any organ-specific system fails.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Q10</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">Which combination correctly represents the path of <span class="kw">oxygen</span> from atmosphere to body cells?</div>
+      <div class="options">
+        <div class="option" data-q="mcq10" data-val="A"><span class="option-key">A</span>Trachea → Bronchi → Alveoli → Blood → Cells</div>
+        <div class="option" data-q="mcq10" data-val="B"><span class="option-key">B</span>Bronchi → Trachea → Alveoli → Blood → Cells</div>
+        <div class="option" data-q="mcq10" data-val="C"><span class="option-key">C</span>Trachea → Alveoli → Bronchi → Blood → Cells</div>
+        <div class="option" data-q="mcq10" data-val="D"><span class="option-key">D</span>Trachea → Bronchi → Blood → Alveoli → Cells</div>
+      </div>
+      <div class="feedback" id="fb-mcq10"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-mcq10">Show Answer</button>
+        <div class="answer-box" id="ans-mcq10">
+          <span class="answer-label">Correct Answer</span>
+          <div class="answer-text"><span class="ans-key">A — Trachea → Bronchi → Alveoli → Blood → Cells.</span> Air travels through the trachea, branches into bronchi, reaches alveoli where gas exchange occurs, then oxygen diffuses into blood and is carried to cells.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= MATCH TAB ======= -->
+  <div class="tab-panel" id="tab-match">
+    <div class="section-header">
+      <div class="section-icon">🔗</div>
+      <div class="section-title">Match the Following</div>
+      <div class="section-count">3 sets</div>
+    </div>
+
+    <!-- SET 1 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Set 1</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">Match each structure in <span class="kw">Column A</span> with its primary function in <span class="kw">Column B</span>.</div>
+      <div class="match-table">
+        <div class="match-col">
+          <div class="match-col-head">Column A</div>
+          <div class="match-item"><span class="letter">A.</span> Bile juice</div>
+          <div class="match-item"><span class="letter">B.</span> Alveoli</div>
+          <div class="match-item"><span class="letter">C.</span> Nephron</div>
+          <div class="match-item"><span class="letter">D.</span> Stomata</div>
+        </div>
+        <div class="match-col">
+          <div class="match-col-head">Column B</div>
+          <div class="match-item"><span class="num">1.</span> Exchange of gases</div>
+          <div class="match-item"><span class="num">2.</span> Reabsorption of water</div>
+          <div class="match-item"><span class="num">3.</span> Emulsification of fats</div>
+          <div class="match-item"><span class="num">4.</span> Regulation of transpiration</div>
+        </div>
+      </div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-match1">Show Answer</button>
+        <div class="answer-box" id="ans-match1">
+          <span class="answer-label">Correct Matching</span>
+          <div class="answer-text">
+            <span class="ans-key">A–3</span> · Bile juice → Emulsification of fats<br>
+            <span class="ans-key">B–1</span> · Alveoli → Exchange of gases<br>
+            <span class="ans-key">C–2</span> · Nephron → Reabsorption of water<br>
+            <span class="ans-key">D–4</span> · Stomata → Regulation of transpiration
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SET 2 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Set 2</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">Match each <span class="kw">blood component</span> in Column A with its function in Column B.</div>
+      <div class="match-table">
+        <div class="match-col">
+          <div class="match-col-head">Column A</div>
+          <div class="match-item"><span class="letter">A.</span> Platelets</div>
+          <div class="match-item"><span class="letter">B.</span> RBC</div>
+          <div class="match-item"><span class="letter">C.</span> WBC</div>
+          <div class="match-item"><span class="letter">D.</span> Plasma</div>
+        </div>
+        <div class="match-col">
+          <div class="match-col-head">Column B</div>
+          <div class="match-item"><span class="num">1.</span> Oxygen transport</div>
+          <div class="match-item"><span class="num">2.</span> Clotting of blood</div>
+          <div class="match-item"><span class="num">3.</span> Defence against pathogens</div>
+          <div class="match-item"><span class="num">4.</span> Transport of dissolved substances</div>
+        </div>
+      </div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-match2">Show Answer</button>
+        <div class="answer-box" id="ans-match2">
+          <span class="answer-label">Correct Matching</span>
+          <div class="answer-text">
+            <span class="ans-key">A–2</span> · Platelets → Clotting of blood<br>
+            <span class="ans-key">B–1</span> · RBC → Oxygen transport<br>
+            <span class="ans-key">C–3</span> · WBC → Defence against pathogens<br>
+            <span class="ans-key">D–4</span> · Plasma → Transport of dissolved substances
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SET 3 -->
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">Set 3</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">Match each <span class="kw">structure</span> in Column A with its correct function in Column B.</div>
+      <div class="match-table">
+        <div class="match-col">
+          <div class="match-col-head">Column A</div>
+          <div class="match-item"><span class="letter">A.</span> Xylem</div>
+          <div class="match-item"><span class="letter">B.</span> Phloem</div>
+          <div class="match-item"><span class="letter">C.</span> Ureter</div>
+          <div class="match-item"><span class="letter">D.</span> Septum</div>
+        </div>
+        <div class="match-col">
+          <div class="match-col-head">Column B</div>
+          <div class="match-item"><span class="num">1.</span> Bidirectional transport</div>
+          <div class="match-item"><span class="num">2.</span> Water transport</div>
+          <div class="match-item"><span class="num">3.</span> Urine transport</div>
+          <div class="match-item"><span class="num">4.</span> Prevents mixing of blood</div>
+        </div>
+      </div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-match3">Show Answer</button>
+        <div class="answer-box" id="ans-match3">
+          <span class="answer-label">Correct Matching</span>
+          <div class="answer-text">
+            <span class="ans-key">A–2</span> · Xylem → Water transport<br>
+            <span class="ans-key">B–1</span> · Phloem → Bidirectional transport<br>
+            <span class="ans-key">C–3</span> · Ureter → Urine transport<br>
+            <span class="ans-key">D–4</span> · Septum → Prevents mixing of blood
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= TRUE/FALSE TAB ======= -->
+  <div class="tab-panel" id="tab-tf">
+    <div class="section-header">
+      <div class="section-icon">⚖</div>
+      <div class="section-title">True / False</div>
+      <div class="section-count">8 statements</div>
+    </div>
+
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">TF1</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text"><span class="kw">Transpiration</span> is essential because it directly provides energy for photosynthesis.</div>
+      <div class="tf-options">
+        <button class="tf-btn" data-q="tf1" data-val="true">True</button>
+        <button class="tf-btn" data-q="tf1" data-val="false">False</button>
+      </div>
+      <div class="feedback" id="fb-tf1"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-tf1">Show Answer</button>
+        <div class="answer-box" id="ans-tf1">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">False.</span> Transpiration is essential for water and mineral transport, not as a direct energy source for photosynthesis. Light energy is the energy source for photosynthesis.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">TF2</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">All absorbed water in plants is used in <span class="kw">photosynthesis</span>.</div>
+      <div class="tf-options">
+        <button class="tf-btn" data-q="tf2" data-val="true">True</button>
+        <button class="tf-btn" data-q="tf2" data-val="false">False</button>
+      </div>
+      <div class="feedback" id="fb-tf2"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-tf2">Show Answer</button>
+        <div class="answer-box" id="ans-tf2">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">False.</span> Only a tiny fraction (less than 2%) of absorbed water is actually used in photosynthesis. The vast majority (~98%) is lost through transpiration.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">TF3</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">The blood entering the lungs through the <span class="kw">pulmonary artery</span> is deoxygenated.</div>
+      <div class="tf-options">
+        <button class="tf-btn" data-q="tf3" data-val="true">True</button>
+        <button class="tf-btn" data-q="tf3" data-val="false">False</button>
+      </div>
+      <div class="feedback" id="fb-tf3"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-tf3">Show Answer</button>
+        <div class="answer-box" id="ans-tf3">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">True.</span> The pulmonary artery is a classic exception — it is an artery that carries deoxygenated blood from the right ventricle to the lungs for oxygenation.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">TF4</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">Food digestion is completed entirely in the <span class="kw">stomach</span>.</div>
+      <div class="tf-options">
+        <button class="tf-btn" data-q="tf4" data-val="true">True</button>
+        <button class="tf-btn" data-q="tf4" data-val="false">False</button>
+      </div>
+      <div class="feedback" id="fb-tf4"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-tf4">Show Answer</button>
+        <div class="answer-box" id="ans-tf4">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">False.</span> The stomach only partially digests proteins. Most digestion — of carbohydrates, fats, and remaining proteins — is completed in the small intestine with the help of bile and pancreatic enzymes.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">TF5</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text"><span class="kw">Nephrons</span> help maintain water balance in the body.</div>
+      <div class="tf-options">
+        <button class="tf-btn" data-q="tf5" data-val="true">True</button>
+        <button class="tf-btn" data-q="tf5" data-val="false">False</button>
+      </div>
+      <div class="feedback" id="fb-tf5"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-tf5">Show Answer</button>
+        <div class="answer-box" id="ans-tf5">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">True.</span> Nephrons regulate water reabsorption from the filtrate, directly controlling the concentration and volume of urine, thereby maintaining the body's water balance (osmoregulation).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="very-hard">
+      <div class="card-meta"><span class="q-num">TF6</span><span class="badge badge-very-hard">Very Hard</span></div>
+      <div class="q-text"><span class="kw">Arteries</span> always carry oxygenated blood.</div>
+      <div class="tf-options">
+        <button class="tf-btn" data-q="tf6" data-val="true">True</button>
+        <button class="tf-btn" data-q="tf6" data-val="false">False</button>
+      </div>
+      <div class="feedback" id="fb-tf6"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-tf6">Show Answer</button>
+        <div class="answer-box" id="ans-tf6">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">False.</span> The pulmonary artery (right ventricle → lungs) carries deoxygenated blood. Arteries are defined by carrying blood away from the heart, not by oxygen content.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">TF7</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text"><span class="kw">Respiration</span> and breathing are the same process.</div>
+      <div class="tf-options">
+        <button class="tf-btn" data-q="tf7" data-val="true">True</button>
+        <button class="tf-btn" data-q="tf7" data-val="false">False</button>
+      </div>
+      <div class="feedback" id="fb-tf7"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-tf7">Show Answer</button>
+        <div class="answer-box" id="ans-tf7">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">False.</span> Breathing is the physical intake/expulsion of air (external process). Respiration is the biochemical process inside cells that oxidises glucose to release ATP energy — they are distinct processes.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="hard">
+      <div class="card-meta"><span class="q-num">TF8</span><span class="badge badge-hard">Hard</span></div>
+      <div class="q-text">The <span class="kw">septum</span> in the human heart increases efficiency of oxygen transport.</div>
+      <div class="tf-options">
+        <button class="tf-btn" data-q="tf8" data-val="true">True</button>
+        <button class="tf-btn" data-q="tf8" data-val="false">False</button>
+      </div>
+      <div class="feedback" id="fb-tf8"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-tf8">Show Answer</button>
+        <div class="answer-box" id="ans-tf8">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">True.</span> The septum completely separates oxygenated (left side) from deoxygenated (right side) blood, enabling double circulation and ensuring tissues receive fully oxygenated blood.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= ASSERTION-REASON TAB ======= -->
+  <div class="tab-panel" id="tab-ar">
+    <div class="section-header">
+      <div class="section-icon">💡</div>
+      <div class="section-title">Assertion–Reason</div>
+      <div class="section-count">8 questions</div>
+    </div>
+    <div style="background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.2); border-radius:12px; padding:14px 18px; margin-bottom:20px; font-size:13px; color:var(--text-dim); line-height:1.7;">
+      <strong style="color:var(--neon2);">Instructions:</strong> Choose the correct option —<br>
+      <strong>A</strong> Both A &amp; R true, R is correct explanation&nbsp;&nbsp;
+      <strong>B</strong> Both true, R is not explanation<br>
+      <strong>C</strong> A true, R false&nbsp;&nbsp;
+      <strong>D</strong> A false, R true
+    </div>
+
+    <!-- AR1 -->
+    <div class="card" data-difficulty="very-hard">
+      <div class="card-meta"><span class="q-num">AR1</span><span class="badge badge-very-hard">Very Hard</span></div>
+      <div class="ar-row"><span class="ar-label assertion">Assertion (A)</span><div class="ar-text">Human heart has <span class="kw">four chambers</span>.</div></div>
+      <div class="ar-row"><span class="ar-label reason">Reason (R)</span><div class="ar-text">Mixing of oxygenated and deoxygenated blood reduces efficiency of respiration.</div></div>
+      <div class="ar-options">
+        <div class="ar-option" data-q="ar1" data-val="A"><span class="opt-letter">A</span>Both true; R is correct explanation</div>
+        <div class="ar-option" data-q="ar1" data-val="B"><span class="opt-letter">B</span>Both true; R is NOT the explanation</div>
+        <div class="ar-option" data-q="ar1" data-val="C"><span class="opt-letter">C</span>A true, R false</div>
+        <div class="ar-option" data-q="ar1" data-val="D"><span class="opt-letter">D</span>A false, R true</div>
+      </div>
+      <div class="feedback" id="fb-ar1"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-ar1">Show Answer</button>
+        <div class="answer-box" id="ans-ar1">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">A — Both true; R correctly explains A.</span> The four-chambered heart evolved precisely to enable complete separation of oxygenated and deoxygenated blood, improving circulatory efficiency.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AR2 -->
+    <div class="card" data-difficulty="very-hard">
+      <div class="card-meta"><span class="q-num">AR2</span><span class="badge badge-very-hard">Very Hard</span></div>
+      <div class="ar-row"><span class="ar-label assertion">Assertion (A)</span><div class="ar-text"><span class="kw">Transpiration</span> helps in upward movement of water.</div></div>
+      <div class="ar-row"><span class="ar-label reason">Reason (R)</span><div class="ar-text">Evaporation of water from leaves creates a pulling force.</div></div>
+      <div class="ar-options">
+        <div class="ar-option" data-q="ar2" data-val="A"><span class="opt-letter">A</span>Both true; R is correct explanation</div>
+        <div class="ar-option" data-q="ar2" data-val="B"><span class="opt-letter">B</span>Both true; R is NOT the explanation</div>
+        <div class="ar-option" data-q="ar2" data-val="C"><span class="opt-letter">C</span>A true, R false</div>
+        <div class="ar-option" data-q="ar2" data-val="D"><span class="opt-letter">D</span>A false, R true</div>
+      </div>
+      <div class="feedback" id="fb-ar2"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-ar2">Show Answer</button>
+        <div class="answer-box" id="ans-ar2">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">A — Both true; R correctly explains A.</span> Transpiration pull (created by evaporation from stomata) is the primary mechanism for drawing water up through the xylem column.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AR3 -->
+    <div class="card" data-difficulty="very-hard">
+      <div class="card-meta"><span class="q-num">AR3</span><span class="badge badge-very-hard">Very Hard</span></div>
+      <div class="ar-row"><span class="ar-label assertion">Assertion (A)</span><div class="ar-text">The <span class="kw">small intestine</span> is highly coiled.</div></div>
+      <div class="ar-row"><span class="ar-label reason">Reason (R)</span><div class="ar-text">Coiling increases surface area available for absorption.</div></div>
+      <div class="ar-options">
+        <div class="ar-option" data-q="ar3" data-val="A"><span class="opt-letter">A</span>Both true; R is correct explanation</div>
+        <div class="ar-option" data-q="ar3" data-val="B"><span class="opt-letter">B</span>Both true; R is NOT the explanation</div>
+        <div class="ar-option" data-q="ar3" data-val="C"><span class="opt-letter">C</span>A true, R false</div>
+        <div class="ar-option" data-q="ar3" data-val="D"><span class="opt-letter">D</span>A false, R true</div>
+      </div>
+      <div class="feedback" id="fb-ar3"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-ar3">Show Answer</button>
+        <div class="answer-box" id="ans-ar3">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">A — Both true; R correctly explains A.</span> The ~7m small intestine is tightly coiled to fit inside the abdomen, and its coiling (along with villi/microvilli) dramatically increases the absorptive surface area.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AR4 -->
+    <div class="card" data-difficulty="very-hard">
+      <div class="card-meta"><span class="q-num">AR4</span><span class="badge badge-very-hard">Very Hard</span></div>
+      <div class="ar-row"><span class="ar-label assertion">Assertion (A)</span><div class="ar-text">During heavy exercise, muscles may undergo <span class="kw">anaerobic respiration</span>.</div></div>
+      <div class="ar-row"><span class="ar-label reason">Reason (R)</span><div class="ar-text">Oxygen supply becomes insufficient compared to demand.</div></div>
+      <div class="ar-options">
+        <div class="ar-option" data-q="ar4" data-val="A"><span class="opt-letter">A</span>Both true; R is correct explanation</div>
+        <div class="ar-option" data-q="ar4" data-val="B"><span class="opt-letter">B</span>Both true; R is NOT the explanation</div>
+        <div class="ar-option" data-q="ar4" data-val="C"><span class="opt-letter">C</span>A true, R false</div>
+        <div class="ar-option" data-q="ar4" data-val="D"><span class="opt-letter">D</span>A false, R true</div>
+      </div>
+      <div class="feedback" id="fb-ar4"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-ar4">Show Answer</button>
+        <div class="answer-box" id="ans-ar4">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">A — Both true; R correctly explains A.</span> When muscles work intensely, oxygen delivery cannot match demand. Cells switch to anaerobic respiration (lactic acid fermentation), causing muscle fatigue and cramps.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AR5 -->
+    <div class="card" data-difficulty="very-hard">
+      <div class="card-meta"><span class="q-num">AR5</span><span class="badge badge-very-hard">Very Hard</span></div>
+      <div class="ar-row"><span class="ar-label assertion">Assertion (A)</span><div class="ar-text"><span class="kw">Bile</span> contains enzymes that digest fats.</div></div>
+      <div class="ar-row"><span class="ar-label reason">Reason (R)</span><div class="ar-text">Bile emulsifies fats into smaller droplets.</div></div>
+      <div class="ar-options">
+        <div class="ar-option" data-q="ar5" data-val="A"><span class="opt-letter">A</span>Both true; R is correct explanation</div>
+        <div class="ar-option" data-q="ar5" data-val="B"><span class="opt-letter">B</span>Both true; R is NOT the explanation</div>
+        <div class="ar-option" data-q="ar5" data-val="C"><span class="opt-letter">C</span>A true, R false</div>
+        <div class="ar-option" data-q="ar5" data-val="D"><span class="opt-letter">D</span><strong>A false</strong>, R true</div>
+      </div>
+      <div class="feedback" id="fb-ar5"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-ar5">Show Answer</button>
+        <div class="answer-box" id="ans-ar5">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">D — A is false, R is true.</span> Bile contains NO digestive enzymes — this is a common misconception. It only emulsifies fats (breaks them into tiny droplets) to increase surface area for lipase action.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AR6 -->
+    <div class="card" data-difficulty="very-hard">
+      <div class="card-meta"><span class="q-num">AR6</span><span class="badge badge-very-hard">Very Hard</span></div>
+      <div class="ar-row"><span class="ar-label assertion">Assertion (A)</span><div class="ar-text">The concentration of <span class="kw">urine</span> may vary in different individuals.</div></div>
+      <div class="ar-row"><span class="ar-label reason">Reason (R)</span><div class="ar-text">Amount of water reabsorbed in nephrons can vary.</div></div>
+      <div class="ar-options">
+        <div class="ar-option" data-q="ar6" data-val="A"><span class="opt-letter">A</span>Both true; R is correct explanation</div>
+        <div class="ar-option" data-q="ar6" data-val="B"><span class="opt-letter">B</span>Both true; R is NOT the explanation</div>
+        <div class="ar-option" data-q="ar6" data-val="C"><span class="opt-letter">C</span>A true, R false</div>
+        <div class="ar-option" data-q="ar6" data-val="D"><span class="opt-letter">D</span>A false, R true</div>
+      </div>
+      <div class="feedback" id="fb-ar6"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-ar6">Show Answer</button>
+        <div class="answer-box" id="ans-ar6">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">A — Both true; R correctly explains A.</span> Hormones like ADH regulate tubular reabsorption of water. More reabsorption = concentrated urine; less = dilute urine. This varies with hydration state and health.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AR7 -->
+    <div class="card" data-difficulty="very-hard">
+      <div class="card-meta"><span class="q-num">AR7</span><span class="badge badge-very-hard">Very Hard</span></div>
+      <div class="ar-row"><span class="ar-label assertion">Assertion (A)</span><div class="ar-text"><span class="kw">Capillaries</span> have extremely thin walls.</div></div>
+      <div class="ar-row"><span class="ar-label reason">Reason (R)</span><div class="ar-text">Thin walls facilitate exchange of materials between blood and tissues.</div></div>
+      <div class="ar-options">
+        <div class="ar-option" data-q="ar7" data-val="A"><span class="opt-letter">A</span>Both true; R is correct explanation</div>
+        <div class="ar-option" data-q="ar7" data-val="B"><span class="opt-letter">B</span>Both true; R is NOT the explanation</div>
+        <div class="ar-option" data-q="ar7" data-val="C"><span class="opt-letter">C</span>A true, R false</div>
+        <div class="ar-option" data-q="ar7" data-val="D"><span class="opt-letter">D</span>A false, R true</div>
+      </div>
+      <div class="feedback" id="fb-ar7"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-ar7">Show Answer</button>
+        <div class="answer-box" id="ans-ar7">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">A — Both true; R correctly explains A.</span> Capillary walls are one cell thick (squamous epithelium) to allow rapid diffusion of O₂, CO₂, glucose, urea, and other molecules between blood and surrounding cells.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AR8 -->
+    <div class="card" data-difficulty="very-hard">
+      <div class="card-meta"><span class="q-num">AR8</span><span class="badge badge-very-hard">Very Hard</span></div>
+      <div class="ar-row"><span class="ar-label assertion">Assertion (A)</span><div class="ar-text"><span class="kw">Phloem transport</span> requires energy.</div></div>
+      <div class="ar-row"><span class="ar-label reason">Reason (R)</span><div class="ar-text">Food is often transported against concentration gradients.</div></div>
+      <div class="ar-options">
+        <div class="ar-option" data-q="ar8" data-val="A"><span class="opt-letter">A</span>Both true; R is correct explanation</div>
+        <div class="ar-option" data-q="ar8" data-val="B"><span class="opt-letter">B</span>Both true; R is NOT the explanation</div>
+        <div class="ar-option" data-q="ar8" data-val="C"><span class="opt-letter">C</span>A true, R false</div>
+        <div class="ar-option" data-q="ar8" data-val="D"><span class="opt-letter">D</span>A false, R true</div>
+      </div>
+      <div class="feedback" id="fb-ar8"></div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-ar8">Show Answer</button>
+        <div class="answer-box" id="ans-ar8">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text"><span class="ans-key">A — Both true; R correctly explains A.</span> Unlike xylem (passive), phloem uses active transport (ATP) to load sugars into sieve tubes. Since food moves bidirectionally including against gradients, energy is essential.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= CHALLENGE TAB ======= -->
+  <div class="tab-panel" id="tab-challenge">
+    <div class="section-header">
+      <div class="section-icon">🏆</div>
+      <div class="section-title">Challenge Questions</div>
+      <div class="section-count">5 olympiad-level</div>
+    </div>
+
+    <div class="card" data-difficulty="olympiad">
+      <div class="card-meta"><span class="q-num">C1</span><span class="badge badge-olympiad">Olympiad</span></div>
+      <div class="challenge-q">Why would a plant <span class="kw">wilt</span> even when there is sufficient water in the soil?</div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-c1">Show Answer</button>
+        <div class="answer-box" id="ans-c1">
+          <span class="answer-label">Model Answer</span>
+          <div class="answer-text"><span class="ans-key">Rate of transpiration exceeds rate of water absorption.</span> If environmental conditions (high temperature, low humidity, strong wind) cause rapid water loss through stomata faster than roots can absorb it, the plant cells lose turgor pressure and wilt — even with abundant soil water.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="olympiad">
+      <div class="card-meta"><span class="q-num">C2</span><span class="badge badge-olympiad">Olympiad</span></div>
+      <div class="challenge-q">A person has normal digestion and absorption but cannot transport <span class="kw">oxygen efficiently</span>. Which blood component is most likely affected?</div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-c2">Show Answer</button>
+        <div class="answer-box" id="ans-c2">
+          <span class="answer-label">Model Answer</span>
+          <div class="answer-text"><span class="ans-key">RBCs / Haemoglobin.</span> Red blood cells contain haemoglobin, the protein that binds and transports oxygen. Deficiency (anaemia) or structural abnormality of haemoglobin (sickle cell) directly impairs oxygen delivery despite normal digestion.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="olympiad">
+      <div class="card-meta"><span class="q-num">C3</span><span class="badge badge-olympiad">Olympiad</span></div>
+      <div class="challenge-q">Why can a <span class="kw">fish not survive</span> on land despite having access to atmospheric oxygen?</div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-c3">Show Answer</button>
+        <div class="answer-box" id="ans-c3">
+          <span class="answer-label">Model Answer</span>
+          <div class="answer-text"><span class="ans-key">Gills collapse in air and cannot exchange gases.</span> Fish gills have thin lamellae that only function when supported and separated by water. In air, the lamellae stick together (surface tension collapses the structure), eliminating the large surface area needed for gas exchange. The fish suffocates despite being surrounded by oxygen.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="olympiad">
+      <div class="card-meta"><span class="q-num">C4</span><span class="badge badge-olympiad">Olympiad</span></div>
+      <div class="challenge-q">A blockage occurs in the <span class="kw">renal artery</span>. Which process of urine formation will be affected first?</div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-c4">Show Answer</button>
+        <div class="answer-box" id="ans-c4">
+          <span class="answer-label">Model Answer</span>
+          <div class="answer-text"><span class="ans-key">Ultrafiltration in the nephrons (glomerular filtration).</span> Ultrafiltration depends entirely on high blood pressure in the glomerulus (supplied by the renal artery). A blockage reduces blood flow and pressure, immediately halting filtration — the very first step. Tubular reabsorption and secretion cannot occur without a filtrate to process.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-difficulty="olympiad">
+      <div class="card-meta"><span class="q-num">C5</span><span class="badge badge-olympiad">Olympiad</span></div>
+      <div class="challenge-q">Why is <span class="kw">double circulation</span> more efficient than single circulation?</div>
+      <div class="answer-wrap">
+        <button class="toggle-btn" data-target="ans-c5">Show Answer</button>
+        <div class="answer-box" id="ans-c5">
+          <span class="answer-label">Model Answer</span>
+          <div class="answer-text"><span class="ans-key">Complete separation + maintained high pressure.</span> In double circulation, blood passes through the heart twice per circuit: once for oxygenation (pulmonary circuit) and once for delivery (systemic circuit). This (1) prevents any mixing of oxygenated and deoxygenated blood, and (2) allows the left ventricle to generate sufficient pressure for systemic delivery — resulting in far more efficient oxygen transport to tissues.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+  // ——— DATA ———
+  const correctAnswers = {
+    mcq1:'B', mcq2:'C', mcq3:'C', mcq4:'B', mcq5:'B',
+    mcq6:'C', mcq7:'B', mcq8:'B', mcq9:'C', mcq10:'A',
+    tf1:'false', tf2:'false', tf3:'true', tf4:'false', tf5:'true',
+    tf6:'false', tf7:'false', tf8:'true',
+    ar1:'A', ar2:'A', ar3:'A', ar4:'A', ar5:'D', ar6:'A', ar7:'A', ar8:'A'
+  };
+
+  const state = { answered: new Set(), correct: new Set() };
+
+  // ——— TABS ———
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById('tab-' + t.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ——— MCQ ———
+  document.querySelectorAll('.option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const q = opt.dataset.q, val = opt.dataset.val;
+      if (document.querySelector(`.option[data-q="${q}"].locked`)) return;
+      const opts = document.querySelectorAll(`.option[data-q="${q}"]`);
+      opts.forEach(o => { o.classList.remove('selected'); o.classList.add('locked'); });
+      opt.classList.add('selected');
+      const correct = correctAnswers[q];
+      const fb = document.getElementById('fb-' + q);
+      if (val === correct) {
+        opt.classList.add('correct');
+        fb.textContent = '✓ Correct!'; fb.className = 'feedback correct';
+        state.correct.add(q);
+      } else {
+        opt.classList.add('wrong');
+        fb.textContent = '✗ Incorrect. See the answer below.'; fb.className = 'feedback wrong';
+        document.querySelectorAll(`.option[data-q="${q}"]`).forEach(o => {
+          if (o.dataset.val === correct) o.classList.add('correct');
+        });
+      }
+      state.answered.add(q); updateProgress();
+    });
+  });
+
+  // ——— TRUE/FALSE ———
+  document.querySelectorAll('.tf-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = btn.dataset.q, val = btn.dataset.val;
+      if (document.querySelector(`.tf-btn[data-q="${q}"].locked`)) return;
+      const btns = document.querySelectorAll(`.tf-btn[data-q="${q}"]`);
+      btns.forEach(b => { b.classList.add('locked'); });
+      btn.classList.add('selected');
+      const correct = correctAnswers[q];
+      const fb = document.getElementById('fb-' + q);
+      if (val === correct) {
+        btn.classList.add('correct');
+        fb.textContent = '✓ Correct!'; fb.className = 'feedback correct';
+        state.correct.add(q);
+      } else {
+        btn.classList.add('wrong');
+        fb.textContent = '✗ Incorrect.'; fb.className = 'feedback wrong';
+        btns.forEach(b => { if (b.dataset.val === correct) b.classList.add('correct'); });
+      }
+      state.answered.add(q); updateProgress();
+    });
+  });
+
+  // ——— AR OPTIONS ———
+  document.querySelectorAll('.ar-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const q = opt.dataset.q, val = opt.dataset.val;
+      if (document.querySelector(`.ar-option[data-q="${q}"].locked`)) return;
+      const opts = document.querySelectorAll(`.ar-option[data-q="${q}"]`);
+      opts.forEach(o => { o.classList.add('locked'); });
+      opt.classList.add('selected');
+      const correct = correctAnswers[q];
+      const fb = document.getElementById('fb-' + q);
+      if (val === correct) {
+        opt.classList.add('correct');
+        fb.textContent = '✓ Correct!'; fb.className = 'feedback correct';
+        state.correct.add(q);
+      } else {
+        opt.classList.add('wrong');
+        fb.textContent = '✗ Incorrect. See answer.'; fb.className = 'feedback wrong';
+        opts.forEach(o => { if (o.dataset.val === correct) o.classList.add('correct'); });
+      }
+      state.answered.add(q); updateProgress();
+    });
+  });
+
+  // ——— TOGGLE ANSWERS ———
+  document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const box = document.getElementById(btn.dataset.target);
+      if (!box) return;
+      box.classList.toggle('visible');
+      btn.textContent = box.classList.contains('visible') ? 'Hide Answer' : 'Show Answer';
+    });
+  });
+
+  // ——— SHOW ALL / HIDE ALL ———
+  document.getElementById('showAllBtn').addEventListener('click', () => {
+    document.querySelectorAll('.answer-box').forEach(b => b.classList.add('visible'));
+    document.querySelectorAll('.toggle-btn').forEach(b => b.textContent = 'Hide Answer');
+    toast('All answers revealed');
+  });
+  document.getElementById('hideAllBtn').addEventListener('click', () => {
+    document.querySelectorAll('.answer-box').forEach(b => b.classList.remove('visible'));
+    document.querySelectorAll('.toggle-btn').forEach(b => b.textContent = 'Show Answer');
+    toast('All answers hidden');
+  });
+
+  // ——— FILTER CHIPS ———
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filter = chip.dataset.filter;
+      document.querySelectorAll('.card').forEach(card => {
+        if (filter === 'all') { card.classList.remove('hidden'); return; }
+        const d = card.dataset.difficulty;
+        card.classList.toggle('hidden', d !== filter);
+      });
+    });
+  });
+
+  // ——— PROGRESS ———
+  function updateProgress() {
+    const interactive = Object.keys(correctAnswers).length;
+    const answered = state.answered.size;
+    const correct = state.correct.size;
+    document.getElementById('answeredCount').textContent = answered;
+    document.getElementById('totalCount').textContent = interactive;
+    document.getElementById('progressFill').style.width = (answered / interactive * 100) + '%';
+    document.getElementById('scoreSpan').innerHTML = `Score: <strong>${correct} / ${answered || '–'}</strong>`;
+  }
+  updateProgress();
+
+  // ——— COPY ———
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const text = getAllQuestionsText();
+    navigator.clipboard.writeText(text).then(() => toast('Questions copied to clipboard!'));
+  });
+
+  function getAllQuestionsText() {
+    const lines = ['LIFE PROCESSES — ADVANCED QUIZ\n'];
+    lines.push('=== MCQ ===');
+    const qs = ['A person suffers damage to the villi...','Left ventricle thickest wall...','CO2 increase causes...','ATP production stops...','Humid environment transpiration...','Backflow into left atrium...','First event in stomach...','Plant loses water but absorbs...','Kidneys fail to remove urea...','Oxygen path to body cells...'];
+    qs.forEach((q,i) => lines.push(`Q${i+1}. ${q}`));
+    lines.push('\n=== TRUE/FALSE ===');
+    lines.push('1. Transpiration provides energy for photosynthesis. [False]');
+    lines.push('2. All absorbed water used in photosynthesis. [False]');
+    lines.push('3. Pulmonary artery carries deoxygenated blood. [True]');
+    lines.push('4. Digestion completed in stomach. [False]');
+    lines.push('5. Nephrons maintain water balance. [True]');
+    lines.push('6. Arteries always carry oxygenated blood. [False]');
+    lines.push('7. Respiration and breathing are same. [False]');
+    lines.push('8. Septum increases efficiency of oxygen transport. [True]');
+    return lines.join('\n');
+  }
+
+  // ——— DOWNLOAD ———
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    const html = document.documentElement.outerHTML;
+    const blob = new Blob([html], {type:'text/html'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'life-processes-quiz.html';
+    a.click();
+    toast('File downloaded!');
+  });
+
+  // ——— PRINT / PDF ———
+  document.getElementById('printBtn').addEventListener('click', () => {
+    document.querySelectorAll('.answer-box').forEach(b => b.classList.add('visible'));
+    toast('Opening print dialog...');
+    setTimeout(() => window.print(), 400);
+  });
+
+  // ——— TOAST ———
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg; el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  // ——— PRINT STYLES (injected) ———
+  const ps = document.createElement('style');
+  ps.media = 'print';
+  ps.textContent = `
+    body { background: white !important; color: #111 !important; }
+    body::before { display:none; }
+    .toolbar, .tabs-wrap, .filter-chips, .toggle-btn, #toast { display:none !important; }
+    .tab-panel { display:block !important; }
+    .card { border:1px solid #ddd !important; background: white !important; box-shadow:none !important; break-inside:avoid; }
+    .answer-box { display:block !important; background:#f8f8ff !important; border:1px solid #ccc !important; }
+    .q-text .kw { color:#1a56db !important; }
+    .ans-key { color:#059669 !important; }
+    .badge-hard { color:#b45309 !important; }
+    .badge-very-hard { color:#be123c !important; }
+    .badge-olympiad { color:#7c3aed !important; }
+    .header h1 { color:#111 !important; -webkit-text-fill-color:#111 !important; }
+  `;
+  document.head.appendChild(ps);
+</script>
+</body>
+</html>
